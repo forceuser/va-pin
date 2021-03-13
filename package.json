@@ -1,0 +1,17 @@
+{
+  "name": "va-pin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "eslint ./"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.21.0",
+    "eslint-plugin-unicorn": "^28.0.2",
+    "serve": "^11.3.2"
+  }
+}
