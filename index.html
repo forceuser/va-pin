@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		*,
+		*::after,
+		*::before {
+			box-sizing: border-box;
+			background: none;
+			color: inherit;
+			font: inherit;
+			padding: 0;
+			margin: 0;
+			outline: none;
+			border: none;
+			text-decoration: none;
+			box-shadow: none;
+			vertical-align: inherit;
+			min-height: 0;
+			min-width: 0;
+			-webkit-font-smoothing: antialiased;
+			-webkit-tap-highlight-color: transparent;
+		}
+
+		:root {
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+		}
+
+		.target-block {
+			width: 200px;
+			height: 200px;
+			position: absolute;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.target-block:nth-child(1) {
+			background: red;
+		}
+
+		.target-block>button {
+			background-color: rgba(140, 140, 140, 0.3);
+			color: white;
+			padding: 8px 24px;
+		}
+
+		.target-block--menu {
+			width: 300px;
+			height: 400px;
+			background-color: blue;
+			max-height: 100%;
+			/* flex: 1; */
+			/* max-height: 100%; */
+		}
+
+		.main-block {
+			height: 5000px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="main-block">
+		<div class="target-block">
+			<button type="button">
+				pin / unpin
+			</button>
+			<div class="target-block--menu" style="display: none;"></div>
+		</div>
+	</div>
+
+	<script type="module">
+		import Pin from "/lib/pin.mjs";
+		import handleDrag from "/lib/drag.mjs";
+
+		handleDrag(".target-block", {
+			move: ([pointer], state) => {
+				Object.assign(state.el.style, {
+					left: `${pointer.cur.pageX}px`,
+					top: `${pointer.cur.pageY}px`,
+				});
+			},
+		});
+
+		let pin;
+		document.querySelector(".target-block button").addEventListener("click", event => {
+			const target = event.target.closest(".target-block");
+			const pinned = target.querySelector(".target-block--menu");
+			if (!pin) {
+				pinned.style.display = "";
+				pin = new Pin(pinned, target, {
+					pos: [
+						{
+							target: { x: "0%", y: "100%" }, pinned: { x: "0%", y: "0%" }, shrinkHeight: true,
+							viewportOffset: "20px",
+						},
+						{
+							target: { x: "0%", y: "0%" }, pinned: { x: "0%", y: "100%" }, shrinkHeight: true,
+							viewportOffset: "20px",
+						},
+					],
+				});
+			}
+			else {
+				pin.remove();
+				pin = null;
+				pinned.style.display = "none";
+			}
+		});
+
+		console.log("pin", Pin);
+	</script>
+</body>
+
+</html>
